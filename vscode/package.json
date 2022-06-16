@@ -1,11 +1,11 @@
 {
-  "name": "prettier-sql-vscode",
-  "displayName": "Prettier SQL VSCode",
-  "description": "VSCode Extension to format SQL files",
+  "name": "bq-formatter",
+  "displayName": "BQ Formatter",
+  "description": "VSCode Extension to format BigQuery SQL files",
   "version": "1.0.0",
-  "publisher": "inferrinizzard",
+  "publisher": "m-ahmadkhan",
   "author": {
-    "name": "inferrinizzard"
+    "name": "m-ahmadkhan"
   },
   "license": "MIT",
   "icon": "prettier-sql-clean.png",
@@ -14,10 +14,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/inferrinizzard/prettier-sql"
+    "url": "https://github.com/m-ahmadkhan/bq-formatter"
   },
   "bugs": {
-    "url": "https://github.com/inferrinizzard/prettier-sql/issues"
+    "url": "https://github.com/m-ahmadkhan/bq-formatter/issues"
   },
   "categories": [
     "Formatters",
@@ -47,7 +47,7 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onCommand:prettier-sql-vscode.format-selection"
+    "onCommand:bq-formatter.format-selection"
   ],
   "main": "./out/extension.js",
   "scripts": {
@@ -65,7 +65,7 @@
     "vsce": "vsce"
   },
   "dependencies": {
-    "sql-formatter": "^6.1.2"
+    "sql-formatter": "^7.0.1"
   },
   "devDependencies": {
     "@types/glob": "^7.1.4",
@@ -98,15 +98,15 @@
     ],
     "commands": [
       {
-        "title": "Format Selection (Prettier-SQL)",
-        "shortTitle": "Format SQL",
-        "command": "prettier-sql-vscode.format-selection"
+        "title": "Format Selection (BigQuery SQL)",
+        "shortTitle": "Format BQ-SQL",
+        "command": "bq-formatter.format-selection"
       }
     ],
     "configuration": {
-      "title": "Prettier SQL",
+      "title": "Bigquery Formatter",
       "properties": {
-        "Prettier-SQL.SQLFlavourOverride": {
+        "bq-formatter.language": {
           "type": "string",
           "enum": [
             "sql",
@@ -123,36 +123,31 @@
             "sqlite",
             "tsql"
           ],
-          "default": "sql",
-          "markdownDescription": "Formats `sql` files in another SQL Flavour when no VSCode Language exists, such as the Microsoft PostgreSQL & MSSQL Extensions"
+          "default": "bigquery",
+          "markdownDescription": "Formats `sql` files in another SQL Flavour when no VSCode Language exists."
         },
-        "Prettier-SQL.ignoreTabSettings": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Ignore user and workplace settings for `tabSize` and `insertSpaces` (uses `#Prettier-SQL.tabSizeOverride#` and `#Prettier-SQL.insertSpacesOverride#`)?"
-        },
-        "Prettier-SQL.tabSizeOverride": {
+        "bq-formatter.tabWidth": {
           "type": "number",
-          "default": 4,
+          "default": 2,
           "minimum": 1,
-          "markdownDescription": "Override for `tabSize` if `#Prettier-SQL.ignoreTabSettings#` is active"
+          "markdownDescription": "bq-formatter.tabWidth gets preference over editor.tabSize if specified."
         },
-        "Prettier-SQL.insertSpacesOverride": {
+        "bq-formatter.useTabs": {
           "type": "boolean",
-          "default": true,
-          "markdownDescription": "Override for `insertSpaces` if `#Prettier-SQL.ignoreTabSettings#` is active"
+          "default": false,
+          "markdownDescription": "If not specified, !editor.insertSpaces is used in its place."
         },
-        "Prettier-SQL.keywordCase": {
+        "bq-formatter.keywordCase": {
           "type": "string",
           "enum": [
             "preserve",
             "upper",
             "lower"
           ],
-          "default": "preserve",
-          "markdownDescription": "Whether to print keywords in ALL CAPS, lowercase, or preserve existing"
+          "default": "upper",
+          "markdownDescription": "Whether to print keywords in UPPERCASE, lowercase, or preserve existing."
         },
-        "Prettier-SQL.indentStyle": {
+        "bq-formatter.indentStyle": {
           "type": "string",
           "enum": [
             "standard",
@@ -167,16 +162,21 @@
           "default": "standard",
           "markdownDescription": "Where to place keywords"
         },
-        "Prettier-SQL.logicalOperatorNewline": {
+        "bq-formatter.multilineLists": {
+          "type": "string | number",
+          "default": 4,
+          "markdownDescription": "Whether to split lists in multiline or not. Possible values: always | avoid | expressionWidth | a number."
+        },
+        "bq-formatter.logicalOperatorNewline": {
           "type": "string",
           "enum": [
             "before",
             "after"
           ],
           "default": "before",
-          "markdownDescription": "Whether to break before or after AND and OR"
+          "markdownDescription": "Whether to break before or after logical operators (AND, OR, etc.)"
         },
-        "Prettier-SQL.aliasAS": {
+        "bq-formatter.aliasAs": {
           "type": "string",
           "enum": [
             "preserve",
@@ -190,15 +190,15 @@
             "Use AS only in SELECT clauses",
             "Do not use AS for aliases"
           ],
-          "default": "select",
-          "markdownDescription": "Where to use AS in column or table aliases"
+          "default": "always",
+          "markdownDescription": "Where to use AS in column or table aliases."
         },
-        "Prettier-SQL.tabulateAlias": {
+        "bq-formatter.tabulateAlias": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Whether to right-align aliases to the longest line in the SELECT clause"
+          "markdownDescription": "Whether to right-align aliases to the longest line in the SELECT clause."
         },
-        "Prettier-SQL.commaPosition": {
+        "bq-formatter.commaPosition": {
           "type": "string",
           "enum": [
             "before",
@@ -211,39 +211,44 @@
             "Comma right-aligned to longest column line"
           ],
           "default": "after",
-          "markdownDescription": "Where to place commas for SELECT and GROUP BY clauses"
+          "markdownDescription": "Where to place commas for SELECT and GROUP BY clauses."
         },
-        "Prettier-SQL.parenOptions.newlineBeforeOpenParen": {
-          "type": "boolean",
-          "default": false,
-          "markdownDescription": "Place (, Open Paren, CASE on newline when creating a new block"
-        },
-        "Prettier-SQL.parenOptions.newlineBeforeCloseParen": {
+        "bq-formatter.newlineBeforeOpenParen": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Place ), Close Paren, END on newline when closing a block"
+          "markdownDescription": "Place (, Open Paren, CASE on newline when creating a new block."
         },
-        "Prettier-SQL.expressionWidth": {
+        "bq-formatter.newlineBeforeCloseParen": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Place ), Close Paren, END on newline when closing a block."
+        },
+        "bq-formatter.expressionWidth": {
           "type": "integer",
           "default": 50,
           "minimum": 0,
-          "markdownDescription": "Number of characters allowed in each line before breaking"
+          "markdownDescription": "Number of characters allowed in each line before breaking."
         },
-        "Prettier-SQL.linesBetweenQueries": {
+        "bq-formatter.linesBetweenQueries": {
           "type": "integer",
-          "default": 1,
+          "default": 2,
           "minimum": 0,
-          "markdownDescription": "How many newlines to place between each query / statement"
+          "markdownDescription": "How many newlines to place between each query / statement."
         },
-        "Prettier-SQL.denseOperators": {
+        "bq-formatter.denseOperators": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Strip whitespace around operators such as + or >="
+          "markdownDescription": "Strip whitespace around operators such as + or >=."
         },
-        "Prettier-SQL.newlineBeforeSemicolon": {
+        "bq-formatter.newlineBeforeSemicolon": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Whether to place semicolon on its own line or on previous line"
+          "markdownDescription": "Whether to place semicolon on its own line or on previous line."
+        },
+        "bq-formatter.insertFinalNewline": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to insert a final newline at the end of the file or not."
         }
       }
     }
