@@ -1,45 +1,61 @@
-# Prettier SQL
+# BQ Formatter
 
-Formats SQL files using the [`prettier-sql`](https://github.com/inferrinizzard/prettier-sql) library
+Formats SQL (default dialect: bigquery-sql) files using the [`sql-formatter`](https://github.com/sql-formatter-org/sql-formatter) library.
+
+Supported SQL dialects: sql, bigquery, db2, hive, mariadb, mysql, n1ql, plsql, postgresql, redshift, spark, sqlite, tsql
 
 ## Issues
 
-Please report issues here: https://github.com/inferrinizzard/prettier-sql/issues
-
-Use the FORMATTING template if it is an issue related the formatting of the SQL, otherwise, please use the VSCODE template for issues with running the VSCode Extension
+Please report issues here: https://github.com/m-ahmadkhan/bq-formatter/issues
 
 ## Configuration
 
-`Prettier-SQL.SQLFlavourOverride`: Uses custom SQL Flavour to format `sql` files. Use this if you are using the Microsoft PostgreSQL or MSSQL Extensions since they do not provide a new language ID for VSCode.
+`bq-formatter.language`: Uses custom SQL Flavour to format `sql` files.
 
-`Prettier-SQL.ignoreTabSettings`: Whether to ignore VSCode user/workspace settings for `tabSize` and `insertSpaces`
+Possible values: sql, bigquery, db2, hive, mariadb, mysql, n1ql, plsql, postgresql, redshift, spark, sqlite, tsql.
 
-`Prettier-SQL.tabSizeOverride`: Overrides `tabSize` if `Prettier-SQL.ignoreTabSettings` is enabled
+Defaults to bigquery if no VSCode language is found.
 
-`Prettier-SQL.insertSpacesOverride`: Overrides `insertSpaces` if `Prettier-SQL.ignoreTabSettings` is enabled
+`bq-formatter.tabWidth`: (number) bq-formatter.tabWidth gets preference over editor.tabSize if specified. Default: 2.
 
-`Prettier-SQL.uppercaseKeywords`: Whether to print keywords in ALL CAPS or lowercase
+`bq-formatter.useTabs`: (boolean) If not specified, !editor.insertSpaces is used in its place. Default: false.
 
-`Prettier-SQL.keywordPosition`: Switched between standard keyword positioning vs maintaining a central space column
+`bq-formatter.keywordCase`: Whether to print keywords in UPPERCASE, lowercase, or preserve existing.
 
-`Prettier-SQL.breakBeforeBooleanOperator`: Whether to break before or after AND and OR
+Possible values: (preserve, lower, upper). Default: upper.
 
-`Prettier-SQL.aliasAS`: Where to use AS in column or table aliases
+`bq-formatter.indentStyle`: Whether to indent keywords or not.
 
-`Prettier-SQL.tabulateAlias`: Whether to right-align aliases to the longest line in the SELECT clause
+Possible values: (standard, tabularLeft, tabularRight). Default: standard.
 
-`Prettier-SQL.commaPosition`: Where to place commas for SELECT and GROUP BY clauses
+`bq-formatter.multilineLists`: Whether to split lists in multiline or not.
 
-`Prettier-SQL.keywordNewline`: Rule for when to break keyword clauses onto a newline
+Possible values: (always, avoid, expressionWidth, or a number). Default: 4.
 
-`Prettier-SQL.openParenNewline`: Whether to place (, Open Paren, CASE on newline when creating a new block
+`bq-formatter.logicalOperatorNewline`: Whether to break before or after logical operators (AND, OR, etc.)
 
-`Prettier-SQL.closeParenNewline`: Whether to place ), Close Paren, END on newline when closing a block
+Possible values: (before, after). Default: before.
 
-`Prettier-SQL.lineWidth`: Number of characters allowed in each line before breaking
+`bq-formatter.aliasAs`: Where to use AS in column or table aliases.
 
-`Prettier-SQL.linesBetweenQueries`: How many newlines to place between each query / statement
+Possible values: (preserve, always, select, never). Default: always.
 
-`Prettier-SQL.denseOperators`: Whether to strip whitespace around operators such as + or >=
+`bq-formatter.tabulateAlias`: (boolean) Whether to right-align aliases to the longest line in the SELECT clause. Default: false.
 
-`Prettier-SQL.semicolonNewline`: Whether to place semicolon on its own line or on previous line
+`bq-formatter.commaPosition`: Where to place commas for SELECT and GROUP BY clauses.
+
+Possible values: (before, after, tabular). Default: after.
+
+`bq-formatter.newlineBeforeOpenParen`: (boolean) Place (, Open Paren, CASE on newline when creating a new block. Default: true.
+
+`bq-formatter.newlineBeforeCloseParen`: (boolean) Place ), Close Paren, END on newline when closing a block. Default: true.
+
+`bq-formatter.expressionWidth`: (number) Number of characters allowed in each line before breaking. Default: 50.
+
+`bq-formatter.linesBetweenQueries`: (number) How many newlines to place between each query / statement. Default: 2.
+
+`bq-formatter.denseOperators`: (boolean) Strip whitespace around operators such as + or >=. Default: false.
+
+`bq-formatter.newlineBeforeSemicolon`: (boolean) Whether to place semicolon on its own line or on previous line. Default: false.
+
+`bq-formatter.insertFinalNewline`: (boolean) Whether to insert a final newline at the end of the file or not. Default: true.
