@@ -2,7 +2,7 @@
   "name": "bq-formatter-vscode",
   "displayName": "BQ Formatter",
   "description": "VSCode Extension to format BigQuery SQL files",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "publisher": "m-ahmadkhan",
   "author": {
     "name": "m-ahmadkhan"
