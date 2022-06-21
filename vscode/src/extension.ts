@@ -13,25 +13,27 @@ import type {
 const getConfigs = (
   settings: vscode.WorkspaceConfiguration,
   tabOptions: vscode.FormattingOptions | { tabSize: number; insertSpaces: boolean },
-  fileLanguage: SqlLanguage) => {
+  fileLanguage: SqlLanguage
+) => {
   // build format configs from settings
 
-  const language = settings.get<SqlLanguage>("language") ?? fileLanguage;
-  const tabWidth = settings.get<number>("tabWidth") ?? tabOptions.tabSize ?? 2;
-  const useTabs = settings.get<boolean>("useTabs") ?? !tabOptions.insertSpaces ?? false;
-  const keywordCase = settings.get<KeywordCase>("keywordCase") ?? "upper";
-  const indentStyle = settings.get<IndentStyle>("indentStyle") ?? "standard";
-  const multilineLists = settings.get<MultilineListsMode | number>("multilineLists") ?? 4;
-  const logicalOperatorNewline = settings.get<LogicalOperatorNewline>("logicalOperatorNewline") ?? "before";
-  const aliasAs = settings.get<AliasMode>("aliasAs") ?? "always";
-  const tabulateAlias = settings.get<boolean>("tabulateAlias") ?? false;
-  const commaPosition = settings.get<CommaPosition>("commaPosition") ?? "after";
-  const newlineBeforeOpenParen = settings.get<boolean>("newlineBeforeOpenParen") ?? true;
-  const newlineBeforeCloseParen = settings.get<boolean>("newlineBeforeCloseParen") ?? true;
-  const expressionWidth = settings.get<number>("expressionWidth") ?? 50;
-  const linesBetweenQueries = settings.get<number>("linesBetweenQueries") ?? 2;
-  const denseOperators = settings.get<boolean>("denseOperators") ?? false;
-  const newlineBeforeSemicolon = settings.get<boolean>("newlineBeforeSemicolon") ?? false;
+  const language = settings.get<SqlLanguage>('language') ?? fileLanguage;
+  const tabWidth = settings.get<number>('tabWidth') ?? tabOptions.tabSize ?? 2;
+  const useTabs = settings.get<boolean>('useTabs') ?? !tabOptions.insertSpaces ?? false;
+  const keywordCase = settings.get<KeywordCase>('keywordCase') ?? 'upper';
+  const indentStyle = settings.get<IndentStyle>('indentStyle') ?? 'standard';
+  const multilineLists = settings.get<MultilineListsMode | number>('multilineLists') ?? 4;
+  const logicalOperatorNewline =
+    settings.get<LogicalOperatorNewline>('logicalOperatorNewline') ?? 'before';
+  const aliasAs = settings.get<AliasMode>('aliasAs') ?? 'always';
+  const tabulateAlias = settings.get<boolean>('tabulateAlias') ?? false;
+  const commaPosition = settings.get<CommaPosition>('commaPosition') ?? 'after';
+  const newlineBeforeOpenParen = settings.get<boolean>('newlineBeforeOpenParen') ?? true;
+  const newlineBeforeCloseParen = settings.get<boolean>('newlineBeforeCloseParen') ?? true;
+  const expressionWidth = settings.get<number>('expressionWidth') ?? 50;
+  const linesBetweenQueries = settings.get<number>('linesBetweenQueries') ?? 2;
+  const denseOperators = settings.get<boolean>('denseOperators') ?? false;
+  const newlineBeforeSemicolon = settings.get<boolean>('newlineBeforeSemicolon') ?? false;
 
   const indent = useTabs ? '\t' : ' '.repeat(tabWidth);
 
@@ -111,7 +113,8 @@ export function activate(context: vscode.ExtensionContext) {
   const formatSelectionCommand = vscode.commands.registerCommand(
     'bq-formatter.format-selection',
     () => {
-      const documentLanguage = vscode.window.activeTextEditor?.document.languageId ?? 'sql-bigquery';
+      const documentLanguage =
+        vscode.window.activeTextEditor?.document.languageId ?? 'sql-bigquery';
       const formatterLanguage = languages[documentLanguage] ?? 'bigquery';
 
       const settings = vscode.workspace.getConfiguration('bq-formatter');
