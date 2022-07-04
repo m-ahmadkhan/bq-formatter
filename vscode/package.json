@@ -162,11 +162,6 @@
           "default": "standard",
           "markdownDescription": "Where to place keywords"
         },
-        "bq-formatter.multilineLists": {
-          "type": "string | number",
-          "default": 4,
-          "markdownDescription": "Whether to split lists in multiline or not. Possible values: always | avoid | expressionWidth | a number."
-        },
         "bq-formatter.logicalOperatorNewline": {
           "type": "string",
           "enum": [
@@ -212,16 +207,6 @@
           ],
           "default": "after",
           "markdownDescription": "Where to place commas for SELECT and GROUP BY clauses."
-        },
-        "bq-formatter.newlineBeforeOpenParen": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Place (, Open Paren, CASE on newline when creating a new block."
-        },
-        "bq-formatter.newlineBeforeCloseParen": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Place ), Close Paren, END on newline when closing a block."
         },
         "bq-formatter.expressionWidth": {
           "type": "integer",
