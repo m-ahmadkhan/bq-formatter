@@ -28,10 +28,6 @@ Possible values: (preserve, lower, upper). Default: upper.
 
 Possible values: (standard, tabularLeft, tabularRight). Default: standard.
 
-`bq-formatter.multilineLists`: Whether to split lists in multiline or not.
-
-Possible values: (always, avoid, expressionWidth, or a number). Default: 4.
-
 `bq-formatter.logicalOperatorNewline`: Whether to break before or after logical operators (AND, OR, etc.)
 
 Possible values: (before, after). Default: before.
@@ -45,10 +41,6 @@ Possible values: (preserve, always, select, never). Default: always.
 `bq-formatter.commaPosition`: Where to place commas for SELECT and GROUP BY clauses.
 
 Possible values: (before, after, tabular). Default: after.
-
-`bq-formatter.newlineBeforeOpenParen`: (boolean) Place (, Open Paren, CASE on newline when creating a new block. Default: true.
-
-`bq-formatter.newlineBeforeCloseParen`: (boolean) Place ), Close Paren, END on newline when closing a block. Default: true.
 
 `bq-formatter.expressionWidth`: (number) Number of characters allowed in each line before breaking. Default: 50.
 

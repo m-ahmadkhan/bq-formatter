@@ -7,7 +7,6 @@ import type {
   AliasMode,
   CommaPosition,
   LogicalOperatorNewline,
-  MultilineListsMode,
 } from 'sql-formatter';
 
 const getConfigs = (
@@ -22,14 +21,11 @@ const getConfigs = (
   const useTabs = settings.get<boolean>('useTabs') ?? !tabOptions.insertSpaces ?? false;
   const keywordCase = settings.get<KeywordCase>('keywordCase') ?? 'upper';
   const indentStyle = settings.get<IndentStyle>('indentStyle') ?? 'standard';
-  const multilineLists = settings.get<MultilineListsMode | number>('multilineLists') ?? 4;
   const logicalOperatorNewline =
     settings.get<LogicalOperatorNewline>('logicalOperatorNewline') ?? 'before';
   const aliasAs = settings.get<AliasMode>('aliasAs') ?? 'always';
   const tabulateAlias = settings.get<boolean>('tabulateAlias') ?? false;
   const commaPosition = settings.get<CommaPosition>('commaPosition') ?? 'after';
-  const newlineBeforeOpenParen = settings.get<boolean>('newlineBeforeOpenParen') ?? true;
-  const newlineBeforeCloseParen = settings.get<boolean>('newlineBeforeCloseParen') ?? true;
   const expressionWidth = settings.get<number>('expressionWidth') ?? 50;
   const linesBetweenQueries = settings.get<number>('linesBetweenQueries') ?? 2;
   const denseOperators = settings.get<boolean>('denseOperators') ?? false;
@@ -42,13 +38,10 @@ const getConfigs = (
     indent,
     keywordCase,
     indentStyle,
-    multilineLists,
     logicalOperatorNewline,
     aliasAs,
     tabulateAlias,
     commaPosition,
-    newlineBeforeOpenParen,
-    newlineBeforeCloseParen,
     expressionWidth,
     linesBetweenQueries,
     denseOperators,
