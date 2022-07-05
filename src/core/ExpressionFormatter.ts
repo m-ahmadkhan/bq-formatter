@@ -274,6 +274,9 @@ export default class ExpressionFormatter {
       this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
       this.layout.indentation.increaseTopLevel();
     } else {
+      if (!this.cfg.keepJoinInFromClause) {
+        this.layout.indentation.decreaseTopLevel();
+      }
       this.layout.add(WS.NEWLINE, WS.INDENT, this.show(token), WS.SPACE);
     }
   }

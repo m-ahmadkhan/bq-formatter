@@ -36,6 +36,7 @@ describe('PlSqlFormatter', () => {
   supportsSchema(format);
   supportsOperators(format, PlSqlFormatter.operators, ['AND', 'OR', 'XOR']);
   supportsJoin(format);
+  supportsJoin(format, { keepJoinInFromClause: false });
   supportsReturning(format);
   supportsParams(format, { numbered: [':'], named: [':'] });
 

@@ -32,6 +32,7 @@ describe('N1qlFormatter', () => {
   supportsArrayAndMapAccessors(format);
   supportsArrayLiterals(format);
   supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'] });
+  supportsJoin(format, { without: ['FULL', 'CROSS', 'NATURAL'], keepJoinInFromClause: false });
   supportsReturning(format);
   supportsParams(format, { positional: true, numbered: ['$'], named: ['$'] });
 

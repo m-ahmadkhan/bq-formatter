@@ -23,5 +23,6 @@ export interface FormatOptions {
   linesBetweenQueries: number;
   denseOperators: boolean;
   newlineBeforeSemicolon: boolean;
+  keepJoinInFromClause: boolean;
   params?: ParamItems | string[];
 }

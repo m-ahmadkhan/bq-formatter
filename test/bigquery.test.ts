@@ -30,6 +30,7 @@ describe('BigQueryFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format, { without: ['NATURAL JOIN'] });
+  supportsJoin(format, { without: ['NATURAL JOIN'], keepJoinInFromClause: false });
   supportsOperators(format, BigQueryFormatter.operators);
   supportsParams(format, { positional: true, named: ['@'], quoted: ['@``'] });
 

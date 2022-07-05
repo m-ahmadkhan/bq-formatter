@@ -32,6 +32,7 @@ describe('SqlFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format);
+  supportsJoin(format, { keepJoinInFromClause: false });
   supportsOperators(format, SqlFormatter.operators);
   supportsParams(format, { positional: true });
 

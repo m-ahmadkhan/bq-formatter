@@ -35,6 +35,11 @@ describe('SqliteFormatter', () => {
     without: ['FULL', 'RIGHT'],
     additionally: ['NATURAL LEFT JOIN', 'NATURAL LEFT OUTER JOIN'],
   });
+  supportsJoin(format, {
+    without: ['FULL', 'RIGHT'],
+    additionally: ['NATURAL LEFT JOIN', 'NATURAL LEFT OUTER JOIN'],
+    keepJoinInFromClause: false,
+  });
   supportsOperators(format, SqliteFormatter.operators);
   supportsParams(format, { positional: true, numbered: ['?'], named: [':', '$', '@'] });
 

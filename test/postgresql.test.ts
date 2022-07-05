@@ -36,6 +36,7 @@ describe('PostgreSqlFormatter', () => {
   supportsSchema(format);
   supportsOperators(format, PostgreSqlFormatter.operators);
   supportsJoin(format);
+  supportsJoin(format, { keepJoinInFromClause: false });
   supportsReturning(format);
   supportsParams(format, { numbered: ['$'] });
 

@@ -49,6 +49,7 @@ const defaultOptions: FormatFnOptions = {
   linesBetweenQueries: 1,
   denseOperators: false,
   newlineBeforeSemicolon: false,
+  keepJoinInFromClause: true,
 };
 
 /**

@@ -33,6 +33,7 @@ describe('Db2Formatter', () => {
   supportsSchema(format);
   supportsOperators(format, Db2Formatter.operators);
   supportsJoin(format);
+  supportsJoin(format, { keepJoinInFromClause: false });
   supportsParams(format, { positional: true, named: [':'] });
 
   it('formats FETCH FIRST like LIMIT', () => {

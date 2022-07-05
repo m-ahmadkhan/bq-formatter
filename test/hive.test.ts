@@ -29,6 +29,7 @@ describe('HiveFormatter', () => {
   supportsBetween(format);
   supportsSchema(format);
   supportsJoin(format, { without: ['NATURAL JOIN'] });
+  supportsJoin(format, { without: ['NATURAL JOIN'], keepJoinInFromClause: false });
   supportsOperators(format, HiveFormatter.operators);
   supportsArrayAndMapAccessors(format);
 

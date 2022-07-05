@@ -37,6 +37,17 @@ export default function behavesLikeMariaDbFormatter(format: FormatFn) {
       'NATURAL RIGHT OUTER JOIN',
     ],
   });
+  supportsJoin(format, {
+    without: ['FULL'],
+    additionally: [
+      'STRAIGHT_JOIN',
+      'NATURAL LEFT JOIN',
+      'NATURAL LEFT OUTER JOIN',
+      'NATURAL RIGHT JOIN',
+      'NATURAL RIGHT OUTER JOIN',
+    ],
+    keepJoinInFromClause: false,
+  });
   supportsParams(format, { positional: true });
 
   it('allows $ character as part of identifiers', () => {

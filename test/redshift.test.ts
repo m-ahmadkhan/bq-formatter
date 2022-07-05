@@ -31,6 +31,7 @@ describe('RedshiftFormatter', () => {
   supportsSchema(format);
   supportsOperators(format, RedshiftFormatter.operators);
   supportsJoin(format);
+  supportsJoin(format, { keepJoinInFromClause: false });
   supportsParams(format, { numbered: ['$'] });
 
   it('formats LIMIT', () => {

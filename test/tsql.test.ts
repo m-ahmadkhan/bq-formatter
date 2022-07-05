@@ -33,6 +33,7 @@ describe('TSqlFormatter', () => {
   supportsSchema(format);
   supportsOperators(format, TSqlFormatter.operators);
   supportsJoin(format, { without: ['NATURAL'] });
+  supportsJoin(format, { without: ['NATURAL'], keepJoinInFromClause: false });
   supportsParams(format, { named: ['@'], quoted: ['@""', '@[]'] });
 
   // TODO: The following are duplicated from StandardSQLFormatter test
