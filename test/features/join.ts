@@ -18,13 +18,25 @@ export default function supportsJoin(
         `SELECT * FROM tbl1 ${join} tbl2`,
         keepJoinInFromClauseDefined ? { keepJoinInFromClause } : undefined
       );
-      expect(result).toBe(dedent`
+
+      let expected = dedent`
         SELECT
           *
         FROM
           tbl1
-        ${!keepJoinInFromClauseDefined || keepJoinInFromClause ? '  ' : ''}${join} tbl2
-      `);
+          ${join} tbl2
+        `;
+      if (keepJoinInFromClauseDefined && !keepJoinInFromClause) {
+        expected = dedent`
+          SELECT
+            *
+          FROM
+            tbl1
+          ${join} tbl2
+        `;
+      }
+
+      expect(result).toBe(expected);
     });
   });
 
@@ -54,18 +66,29 @@ export default function supportsJoin(
           ${join} items USING (item_id, name);`,
           keepJoinInFromClauseDefined ? { keepJoinInFromClause } : undefined
         );
-        expect(result).toBe(dedent`
+
+        let expected = dedent`
           SELECT
             *
           FROM
             customers
-          ${
-            !keepJoinInFromClauseDefined || keepJoinInFromClause ? '  ' : ''
-          }${join} orders ON customers.customer_id = orders.customer_id
-          ${
-            !keepJoinInFromClauseDefined || keepJoinInFromClause ? '  ' : ''
-          }${join} items USING (item_id, name);
-        `);
+            ${join} orders ON customers.customer_id = orders.customer_id
+            ${join} items USING (item_id, name);
+        `;
+        if (keepJoinInFromClauseDefined && !keepJoinInFromClause) {
+          expected = dedent`
+            SELECT
+              *
+            FROM
+              customers
+            ${join} orders
+            ON customers.customer_id = orders.customer_id
+            ${join} items
+            USING (item_id, name);
+          `;
+        }
+
+        expect(result).toBe(expected);
       });
     });
 }

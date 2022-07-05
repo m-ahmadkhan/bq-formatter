@@ -297,7 +297,11 @@ export default class ExpressionFormatter {
 
   // Formats ON and USING keywords
   private formatJoinCondition(token: Token) {
-    this.layout.add(this.show(token), WS.SPACE);
+    if (this.cfg.keepJoinInFromClause) {
+      this.layout.add(this.show(token), WS.SPACE);
+    } else {
+      this.layout.add(WS.NEWLINE, this.show(token), WS.SPACE);
+    }
   }
 
   /**
