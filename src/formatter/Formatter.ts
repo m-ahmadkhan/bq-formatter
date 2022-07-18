@@ -47,6 +47,10 @@ export default class Formatter {
    * @return {string} The formatter query
    */
   public format(query: string): string {
+    if (this.hasSFIgnore(query)) {
+      return query;
+    }
+
     const tokens = this.cachedTokenizer().tokenize(query);
     const processedTokens = new AliasAs(this.cfg, tokens).process();
     const ast = new Parser(processedTokens).parse();
@@ -77,6 +81,10 @@ export default class Formatter {
       layout.add(WS.NO_SPACE, ';');
     }
     return layout.toString();
+  }
+
+  private hasSFIgnore(query: string): boolean {
+    return !!query.trim().match(/^--\s*@sf-ignore/);
   }
 
   private postFormat(query: string): string {

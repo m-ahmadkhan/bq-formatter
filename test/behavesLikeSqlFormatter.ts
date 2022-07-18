@@ -365,4 +365,12 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
         tbl2;
     `);
   });
+
+  it('does not format with sf-ignore', () => {
+    const input = `
+      -- @sf-ignore
+      SELECT * FROM tbl1 UNION ALL SELECT * FROM tbl2;
+    `;
+    expect(format(input)).toBe(input);
+  });
 }
