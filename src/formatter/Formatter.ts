@@ -47,7 +47,7 @@ export default class Formatter {
    * @return {string} The formatter query
    */
   public format(query: string): string {
-    if (this.hasSFIgnore(query)) {
+    if (this.hasNoFormatComment(query)) {
       return query;
     }
 
@@ -83,8 +83,8 @@ export default class Formatter {
     return layout.toString();
   }
 
-  private hasSFIgnore(query: string): boolean {
-    return !!query.trim().match(/^--\s*@sf-ignore/);
+  private hasNoFormatComment(query: string): boolean {
+    return !!query.trim().match(/^(--|\/\*)\s*@no-format/);
   }
 
   private postFormat(query: string): string {

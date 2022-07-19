@@ -366,11 +366,20 @@ export default function behavesLikeSqlFormatter(format: FormatFn) {
     `);
   });
 
-  it('does not format with sf-ignore', () => {
-    const input = `
-      -- @sf-ignore
+  it('does not format with no-format', () => {
+    const inputLineComment = `
+      -- @no-format formatter not working
       SELECT * FROM tbl1 UNION ALL SELECT * FROM tbl2;
     `;
-    expect(format(input)).toBe(input);
+    const inputBlockComment = `
+      /*
+      @no-format
+      because formatter isn't working on this query
+      */
+      SELECT * FROM tbl1 UNION ALL SELECT * FROM tbl2;
+    `;
+
+    expect(format(inputLineComment)).toBe(inputLineComment);
+    expect(format(inputBlockComment)).toBe(inputBlockComment);
   });
 }
