@@ -74,6 +74,9 @@ export function activate(context: vscode.ExtensionContext) {
       let text;
       try {
         text = formatInternal(lines.join('\n'), formatConfigs);
+        if (settings.get('insertFinalNewline') && !text.endsWith('\n')) {
+          text = text + '\n';
+        }
       } catch (e) {
         vscode.window.showErrorMessage('Unable to format SQL:\n' + e);
         return [];
@@ -86,7 +89,7 @@ export function activate(context: vscode.ExtensionContext) {
             document.positionAt(0),
             document.lineAt(document.lineCount - 1).range.end
           ),
-          text + (settings.get('insertFinalNewline') ? '\n' : '')
+          text,
         ),
       ];
     },
