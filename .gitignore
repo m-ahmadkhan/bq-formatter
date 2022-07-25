@@ -1,6 +1,5 @@
-dist
-lib
-node_modules
-.DS_Store
-coverage
-.eslintcache
+node_modules/
+out/
+.vscode-test/
+
+*.vsix
