@@ -1,150 +1,241 @@
 {
-  "name": "sql-formatter",
-  "version": "8.0.0",
-  "description": "Format whitespace in a SQL query to make it more readable",
-  "license": "MIT",
-  "main": "lib/index.js",
-  "types": "lib/src/index.d.ts",
-  "bin": {
-    "sql-formatter": "./bin/sql-formatter-cli.js"
+  "name": "bq-formatter-vscode",
+  "displayName": "BQ Formatter",
+  "description": "VSCode Extension to format BigQuery SQL files",
+  "version": "1.3.0",
+  "publisher": "m-ahmadkhan",
+  "author": {
+    "name": "m-ahmadkhan"
   },
-  "keywords": [
-    "sql",
-    "formatter",
-    "format",
-    "n1ql",
-    "redshift",
-    "spark",
-    "whitespace",
-    "mysql",
-    "mariadb",
-    "postgresql",
-    "pl/sql",
-    "transact-sql",
-    "db2",
-    "sqlite"
-  ],
-  "contributors": [
-    "Adrien Pyke <adpyke@gmail.com>",
-    "Ahmad Khan <ahmad.khan@educative.io>",
-    "Alexandr Kozhevnikov <aedkozhevnikov@sberbank.ru>",
-    "Andrew",
-    "Benjamin Bellamy",
-    "bingou",
-    "Damon Davison <ddavison@avalere.com>",
-    "Davut Can Abacigil <can@teamsql.io>",
-    "Erik Hirmo <erik.hirmo@roguewave.com>",
-    "George Leslie-Waksman <waksman@gmail.com>",
-    "htaketani <h.taketani@gmail.com>",
-    "Ian Campbell <icampbell@immuta.com>",
-    "ivan baktsheev",
-    "Jacobo Bouzas Quiroga <jacobo.bouzas@factorial.co>",
-    "João Pimentel Ferreira",
-    "Justin Dane Vallar <jdvallar@gmail.com>",
-    "Martin Nowak <code@dawg.eu>",
-    "Matheus Salmi <mathsalmi@gmail.com>",
-    "Matheus Teixeira <matheus.mtxr@gmail.com>",
-    "Nicolas Dermine <nicolas.dermine@gmail.com>",
-    "Offir Baron <ofir@panoply.io>",
-    "Olexandr Sydorchuk <olexandr.syd@gmail.com>",
-    "Rafael Pinto <raprp@posteo.de>",
-    "Rahel Rjadnev-Meristo <rahelini@gmail.com>",
-    "Rene Saarsoo <nene@triin.net>",
-    "Rodrigo Stuchi",
-    "Romain Rigaux <hello@getromain.com>",
-    "Sasha Aliashkevich <olsender@gmail.com>",
-    "Sean Song <mail@seansong.dev>",
-    "Sergei Egorov <sergei.egorov@zeroturnaround.com>",
-    "Steven Yung <stevenyung@fastmail.com>",
-    "Toliver <teejae@gmail.com>",
-    "Tyler Jones <tyler.jones@txwormhole.com>",
-    "Uku Pattak <ukupat@gmail.com>",
-    "Xin Hu <hoosin.git@gmail.com>"
-  ],
-  "files": [
-    "dist",
-    "bin",
-    "lib"
-  ],
-  "scripts": {
-    "clean": "rimraf lib dist coverage",
-    "git:changes": "git diff --name-only --diff-filter d | xargs",
-    "ts:check": "ttsc --noEmit",
-    "ts:changes": "ttsc --noEmit --incremental",
-    "lint": "eslint --cache .",
-    "lint:changes": "sh -c eslint --cache $(yarn git:changes)",
-    "pretty": "prettier --write .",
-    "pretty:check": "prettier --check .",
-    "fix": "yarn pretty && eslint --fix .",
-    "test": "jest",
-    "test:watch": "yarn test -- --watch",
-    "check": "yarn ts:check && yarn pretty:check && yarn lint && yarn test",
-    "prepare": "yarn clean && yarn fix && yarn check && yarn build",
-    "pre-commit": "npm-run-all --parallel ts:changes lint:changes",
-    "build:babel": "babel src --out-dir lib --extensions .ts --source-maps",
-    "build:types": "ttsc --module commonjs --emitDeclarationOnly --isolatedModules",
-    "build:minified": "webpack --config webpack.prod.js",
-    "build": "npm-run-all --parallel build:babel build:types build:minified",
-    "release": "release-it"
+  "license": "MIT",
+  "icon": "prettier-sql-clean.png",
+  "engines": {
+    "vscode": "^1.63.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sql-formatter-org/sql-formatter.git"
+    "url": "https://github.com/m-ahmadkhan/bq-formatter"
   },
   "bugs": {
-    "url": "https://github.com/sql-formatter-org/sql-formatter/issues"
+    "url": "https://github.com/m-ahmadkhan/bq-formatter/issues"
+  },
+  "categories": [
+    "Formatters",
+    "Other"
+  ],
+  "keywords": [
+    "bigquery",
+    "db2",
+    "hive",
+    "formatter",
+    "mariadb",
+    "mssql",
+    "mysql",
+    "node",
+    "n1ql",
+    "plsql",
+    "pl/sql",
+    "postgres",
+    "postgresql",
+    "prettier",
+    "redshift",
+    "spark",
+    "sparksql",
+    "sql",
+    "sql server",
+    "tsql"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:bq-formatter.format-selection"
+  ],
+  "main": "./out/extension.js",
+  "scripts": {
+    "clean": "rimraf out .vscode-test",
+    "compile": "tsc --project ./tsconfig.json",
+    "compile:types": "tsc --emitDeclarationOnly --project ./tsconfig.json",
+    "watch": "tsc --watch --project ./",
+    "build": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+    "build:prod": "yarn run build --minify && yarn run compile:types",
+    "build:dev": "yarn run build --sourcemap && yarn run compile:types",
+    "vscode:prepublish": "yarn run build:prod",
+    "lint": "eslint src --ext ts",
+    "pretest": "yarn run compile && yarn run lint",
+    "test": "node ./out/test/runTest.js",
+    "vsce": "vsce"
   },
   "dependencies": {
-    "argparse": "^2.0.1"
+    "sql-formatter": "^8.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.4",
-    "@babel/core": "^7.10.4",
-    "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
-    "@babel/preset-typescript": "^7.15.0",
-    "@jest/globals": "^28.1.2",
-    "@types/babel__core": "^7.1.15",
-    "@types/jest": "^28.1.4",
-    "@typescript-eslint/eslint-plugin": "^5.21.0",
-    "@typescript-eslint/parser": "^5.21.0",
-    "@zerollup/ts-transform-paths": "^1.7.18",
-    "babel-eslint": "^10.1.0",
-    "babel-jest": "^28.1.2",
-    "babel-loader": "^8.1.0",
-    "babel-plugin-add-module-exports": "^1.0.2",
-    "babel-plugin-module-resolver": "^4.1.0",
-    "dedent-js": "^1.0.1",
-    "eslint": "^8.14.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^28.1.2",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.0.5",
-    "release-it": "^15.1.1",
-    "rimraf": "^3.0.2",
-    "ts-jest": "^28.0.5",
-    "ts-loader": "^9.3.1",
-    "ttypescript": "^1.5.13",
-    "typescript": "^4.7.4",
-    "webpack": "^5.64.1",
-    "webpack-cli": "^4.9.1",
-    "webpack-merge": "^5.8.0"
+    "@types/glob": "^7.1.4",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "14.x",
+    "@types/vscode": "^1.63.0",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
+    "@vscode/test-electron": "^1.6.2",
+    "esbuild": "^0.14.8",
+    "eslint": "^8.1.0",
+    "glob": "^7.1.7",
+    "mocha": "^9.1.3",
+    "typescript": "^4.4.4",
+    "vsce": "^2.7.0"
   },
-  "jest": {
-    "preset": "ts-jest",
-    "roots": [
-      "test"
+  "contributes": {
+    "languages": [
+      {
+        "id": "sql",
+        "aliases": [
+          "SQL",
+          "sql"
+        ],
+        "extensions": [
+          ".sql",
+          ".q"
+        ]
+      }
     ],
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "src/**/*.ts"
+    "commands": [
+      {
+        "title": "Format Selection (BigQuery SQL)",
+        "shortTitle": "Format BQ-SQL",
+        "command": "bq-formatter.format-selection"
+      }
     ],
-    "moduleNameMapper": {
-      "src/(.*)": "<rootDir>/src/$1"
+    "configuration": {
+      "title": "Bigquery Formatter",
+      "properties": {
+        "bq-formatter.language": {
+          "type": "string",
+          "enum": [
+            "sql",
+            "bigquery",
+            "db2",
+            "hive",
+            "mariadb",
+            "mysql",
+            "n1ql",
+            "plsql",
+            "postgresql",
+            "redshift",
+            "spark",
+            "sqlite",
+            "tsql"
+          ],
+          "default": "bigquery",
+          "markdownDescription": "Formats `sql` files in another SQL Flavour when no VSCode Language exists."
+        },
+        "bq-formatter.tabWidth": {
+          "type": "number",
+          "default": 2,
+          "minimum": 1,
+          "markdownDescription": "bq-formatter.tabWidth gets preference over editor.tabSize if specified."
+        },
+        "bq-formatter.useTabs": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "If not specified, !editor.insertSpaces is used in its place."
+        },
+        "bq-formatter.keywordCase": {
+          "type": "string",
+          "enum": [
+            "preserve",
+            "upper",
+            "lower"
+          ],
+          "default": "upper",
+          "markdownDescription": "Whether to print keywords in UPPERCASE, lowercase, or preserve existing."
+        },
+        "bq-formatter.indentStyle": {
+          "type": "string",
+          "enum": [
+            "standard",
+            "tabularLeft",
+            "tabularRight"
+          ],
+          "enumDescriptions": [
+            "Standard SQL format, with cascading indents",
+            "Maintain space column between keyword and args, aligning keywords to left",
+            "Maintain space column between keyword and args, aligning keywords to right"
+          ],
+          "default": "standard",
+          "markdownDescription": "Where to place keywords"
+        },
+        "bq-formatter.logicalOperatorNewline": {
+          "type": "string",
+          "enum": [
+            "before",
+            "after"
+          ],
+          "default": "before",
+          "markdownDescription": "Whether to break before or after logical operators (AND, OR, etc.)"
+        },
+        "bq-formatter.aliasAs": {
+          "type": "string",
+          "enum": [
+            "preserve",
+            "always",
+            "select",
+            "never"
+          ],
+          "enumDescriptions": [
+            "Preserve existing AS usage",
+            "Use AS in SELECT clauses and for tables",
+            "Use AS only in SELECT clauses",
+            "Do not use AS for aliases"
+          ],
+          "default": "always",
+          "markdownDescription": "Where to use AS in column or table aliases."
+        },
+        "bq-formatter.tabulateAlias": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Whether to right-align aliases to the longest line in the SELECT clause."
+        },
+        "bq-formatter.commaPosition": {
+          "type": "string",
+          "enum": [
+            "before",
+            "after",
+            "tabular"
+          ],
+          "enumDescriptions": [
+            "Comma preceding each column",
+            "Comma following each column",
+            "Comma right-aligned to longest column line"
+          ],
+          "default": "after",
+          "markdownDescription": "Where to place commas for SELECT and GROUP BY clauses."
+        },
+        "bq-formatter.expressionWidth": {
+          "type": "integer",
+          "default": 50,
+          "minimum": 0,
+          "markdownDescription": "Number of characters allowed in each line before breaking."
+        },
+        "bq-formatter.linesBetweenQueries": {
+          "type": "integer",
+          "default": 2,
+          "minimum": 0,
+          "markdownDescription": "How many newlines to place between each query / statement."
+        },
+        "bq-formatter.denseOperators": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Strip whitespace around operators such as + or >=."
+        },
+        "bq-formatter.newlineBeforeSemicolon": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Whether to place semicolon on its own line or on previous line."
+        },
+        "bq-formatter.insertFinalNewline": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to insert a final newline at the end of the file or not."
+        }
+      }
     }
   }
 }
