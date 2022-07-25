@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { format } from 'sql-formatter';
+import { format, FormatFnOptions } from 'sql-formatter';
 import type {
   SqlLanguage,
   KeywordCase,
@@ -8,6 +8,16 @@ import type {
   CommaPosition,
   LogicalOperatorNewline,
 } from 'sql-formatter';
+
+const hasNoFormat = (query: string) => {
+  return !!query.trim().match(/^(--|\/\*)\s*@no-format/);
+};
+
+const formatInternal = (query: string, cfg?: Partial<FormatFnOptions>) => {
+  if (hasNoFormat(query))
+    return query;
+  return format(query, cfg);
+};
 
 const getConfigs = (
   settings: vscode.WorkspaceConfiguration,
@@ -63,7 +73,10 @@ export function activate(context: vscode.ExtensionContext) {
       const lines = [...new Array(document.lineCount)].map((_, i) => document.lineAt(i).text);
       let text;
       try {
-        text = format(lines.join('\n'), formatConfigs);
+        text = formatInternal(lines.join('\n'), formatConfigs);
+        if (settings.get('insertFinalNewline') && !text.endsWith('\n')) {
+          text = text + '\n';
+        }
       } catch (e) {
         vscode.window.showErrorMessage('Unable to format SQL:\n' + e);
         return [];
@@ -76,7 +89,7 @@ export function activate(context: vscode.ExtensionContext) {
             document.positionAt(0),
             document.lineAt(document.lineCount - 1).range.end
           ),
-          text + (settings.get('insertFinalNewline') ? '\n' : '')
+          text,
         ),
       ];
     },
@@ -126,7 +139,7 @@ export function activate(context: vscode.ExtensionContext) {
         // format and replace each selection
         editor?.edit(editBuilder => {
           editor.selections.forEach(sel =>
-            editBuilder.replace(sel, format(editor.document.getText(sel), formatConfigs))
+            editBuilder.replace(sel, formatInternal(editor.document.getText(sel), formatConfigs))
           );
         });
       } catch (e) {
