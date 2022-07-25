@@ -51,3 +51,23 @@ Possible values: (before, after, tabular). Default: after.
 `bq-formatter.newlineBeforeSemicolon`: (boolean) Whether to place semicolon on its own line or on previous line. Default: false.
 
 `bq-formatter.insertFinalNewline`: (boolean) Whether to insert a final newline at the end of the file or not. Default: true.
+
+## @no-format comment
+
+If you don't want to format an SQL file, you can include the `@no-format` comment at the top of the file.
+
+```sql
+-- @no-format
+
+select * from mytable;
+```
+
+OR
+
+```sql
+/*
+-- @no-format
+*/
+
+select * from mytable;
+```
