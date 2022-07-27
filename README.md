@@ -66,7 +66,7 @@ OR
 
 ```sql
 /*
--- @no-format
+@no-format
 */
 
 select * from mytable;
