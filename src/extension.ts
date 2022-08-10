@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
-import { format, FormatFnOptions } from 'sql-formatter';
+import { format, FormatOptions } from 'sql-formatter';
 import type {
   SqlLanguage,
   KeywordCase,
   IndentStyle,
-  AliasMode,
   CommaPosition,
   LogicalOperatorNewline,
 } from 'sql-formatter';
@@ -13,7 +12,7 @@ const hasNoFormat = (query: string) => {
   return !!query.trim().match(/^(--|\/\*)\s*@no-format/);
 };
 
-const formatInternal = (query: string, cfg?: Partial<FormatFnOptions>) => {
+const formatInternal = (query: string, cfg?: Partial<FormatOptions>) => {
   if (hasNoFormat(query))
     return query;
   return format(query, cfg);
@@ -25,7 +24,6 @@ const getConfigs = (
   fileLanguage: SqlLanguage
 ) => {
   // build format configs from settings
-
   const language = settings.get<SqlLanguage>('language') ?? fileLanguage;
   const tabWidth = settings.get<number>('tabWidth') ?? tabOptions.tabSize ?? 2;
   const useTabs = settings.get<boolean>('useTabs') ?? !tabOptions.insertSpaces ?? false;
@@ -33,23 +31,20 @@ const getConfigs = (
   const indentStyle = settings.get<IndentStyle>('indentStyle') ?? 'standard';
   const logicalOperatorNewline =
     settings.get<LogicalOperatorNewline>('logicalOperatorNewline') ?? 'before';
-  const aliasAs = settings.get<AliasMode>('aliasAs') ?? 'always';
   const tabulateAlias = settings.get<boolean>('tabulateAlias') ?? false;
   const commaPosition = settings.get<CommaPosition>('commaPosition') ?? 'after';
   const expressionWidth = settings.get<number>('expressionWidth') ?? 50;
   const linesBetweenQueries = settings.get<number>('linesBetweenQueries') ?? 2;
   const denseOperators = settings.get<boolean>('denseOperators') ?? false;
   const newlineBeforeSemicolon = settings.get<boolean>('newlineBeforeSemicolon') ?? false;
-
   const indent = useTabs ? '\t' : ' '.repeat(tabWidth);
 
-  const formatConfigs = {
+  return {
     language,
     indent,
     keywordCase,
     indentStyle,
     logicalOperatorNewline,
-    aliasAs,
     tabulateAlias,
     commaPosition,
     expressionWidth,
@@ -57,7 +52,6 @@ const getConfigs = (
     denseOperators,
     newlineBeforeSemicolon,
   };
-  return formatConfigs;
 };
 
 export function activate(context: vscode.ExtensionContext) {
