@@ -2,7 +2,7 @@
   "name": "bq-formatter-vscode",
   "displayName": "BQ Formatter",
   "description": "VSCode Extension to format BigQuery SQL files",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "publisher": "m-ahmadkhan",
   "author": {
     "name": "m-ahmadkhan"
@@ -65,7 +65,7 @@
     "vsce": "vsce"
   },
   "dependencies": {
-    "sql-formatter": "^8.0.0"
+    "sql-formatter": "9.0.0"
   },
   "devDependencies": {
     "@types/glob": "^7.1.4",
@@ -170,23 +170,6 @@
           ],
           "default": "before",
           "markdownDescription": "Whether to break before or after logical operators (AND, OR, etc.)"
-        },
-        "bq-formatter.aliasAs": {
-          "type": "string",
-          "enum": [
-            "preserve",
-            "always",
-            "select",
-            "never"
-          ],
-          "enumDescriptions": [
-            "Preserve existing AS usage",
-            "Use AS in SELECT clauses and for tables",
-            "Use AS only in SELECT clauses",
-            "Do not use AS for aliases"
-          ],
-          "default": "always",
-          "markdownDescription": "Where to use AS in column or table aliases."
         },
         "bq-formatter.tabulateAlias": {
           "type": "boolean",
